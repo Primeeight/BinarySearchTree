@@ -197,13 +197,16 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
         TreeNode<E> current = root;
         //postorder(root);
         //getNumberOfLeaves(root.left);
-        current = current.right;
-        if (current.element == null)
-            count++;
-        current = current.left;
-        if (current.element == null)
-            count++;
-
+        for (int i = 0; i < this.size; i++) {
+            if (current.right == null && current.left == null)
+                count++;
+            else if (current.left != null) {
+                current = current.left;
+            } else if (current.right != null) {
+                current = current.right;
+            }
+        }
+        System.out.print("The number of leaves is " + count);
         return count;
     }
 
@@ -238,9 +241,11 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     /**
      * Check if tree is empty.
      * Create an ArrayList.
-     * Iterate through the tree in preorder and add each element starting from specified element.
+     * Iterate through the tree in
+     * preorder and add each element starting from specified element.
      * Iterate recursively or through a loop.
      * Root is not the specified element.
+     * Return all elements in the tree.
      * Return the ArrayList.
      * Does it need to search for the element before returning the empty ArrayList?
      *

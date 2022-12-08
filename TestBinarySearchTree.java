@@ -41,6 +41,7 @@ public class TestBinarySearchTree {
          * getNumberOfLeaves
          * inorderPredecessor
          */
+        //g
         System.out.println("\nEnter an element to insert");
         key = input.nextInt();
         tree.insert(key);
@@ -55,8 +56,7 @@ public class TestBinarySearchTree {
 
         System.out.println("\nEnter an element to check for the left subtree of");
         key = input.nextInt();
-        tree.leftSubTree(key);
-
+        System.out.println("\nThe left sub tree of " + key + " is " + tree.leftSubTree(key) + " in pre-order");
 
         System.out.println("\nEnter an element to check for the predecessor");
         key = input.nextInt();
