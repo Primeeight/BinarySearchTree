@@ -27,8 +27,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     public boolean search(E e) {
         TreeNode<E> current = root; // Start from the root
         while (current != null) {
-            if (e.compareTo(current.element) < 0) {
-                current = current.left;
+            if (e.compareTo(current.element) < 0) {current = current.left;
             } else if (e.compareTo(current.element) > 0) {
                 current = current.right;
             } else // element matches current.element
@@ -93,7 +92,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
 
     /**
      * Postorder traversal from the root
-     */
+     *////root
     public void postorder() {
         postorder(root);
     }
@@ -185,8 +184,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     /**
      * Check if tree is empty
      * Check if each node is a leaf; if it is a leaf, increment the count.
-     * Postorder Search is used.
-     *
+     * Postorder search is used.
+     * Complete Post order
      * @return the count.
      */
     /* Returns the number of leaf nodes in this tree, returns 0 if tree is empty*/
@@ -194,15 +193,23 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
         //left for you to implement in Lab 7
         int count = 0; //count of leaf nodes
         if (root == null) return count;
+        TreeNode<E> parent = null;
         TreeNode<E> current = root;
-        //postorder(root);
-        //getNumberOfLeaves(root.left);
         for (int i = 0; i < this.size; i++) {
-            if (current.right == null && current.left == null)
+            //case 1: Check if node is a leaf, incriment the count if it is a leaf, move to the parents right node.
+            if (current.right == null && current.left == null) {
                 count++;
+                current = parent;
+
+                current = current.right;
+            }
+            //case 2: current node has a left node.
             else if (current.left != null) {
+                parent = current;
                 current = current.left;
+                //case 3: current node has no left node but a right node.
             } else if (current.right != null) {
+                parent = current;
                 current = current.right;
             }
         }
@@ -258,11 +265,14 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
         java.util.ArrayList<E> list = new java.util.ArrayList<E>();
         if (root != null && search(e)) {
             TreeNode<E> current = root.right;//Start from the root.
-            list.add(current.element);
-            current = current.left;
-            list.add(current.element);
-            current = current.right;
-            list.add(current.element);
+            //loop to iterate through selected node's subtree.
+            for (int i = 0; i < this.size; i++) {
+                list.add(current.element);
+                current = current.left;
+                list.add(current.element);
+                current = current.right;
+                list.add(current.element);
+            }
         }
         return list;
     }
