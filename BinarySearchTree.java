@@ -1,5 +1,3 @@
-
-import java.io.*;
 import java.util.*;
 
 public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
@@ -27,7 +25,8 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     public boolean search(E e) {
         TreeNode<E> current = root; // Start from the root
         while (current != null) {
-            if (e.compareTo(current.element) < 0) {current = current.left;
+            if (e.compareTo(current.element) < 0) {
+                current = current.left;
             } else if (e.compareTo(current.element) > 0) {
                 current = current.right;
             } else // element matches current.element
@@ -186,6 +185,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
      * Check if each node is a leaf; if it is a leaf, increment the count.
      * Postorder search is used.
      * Complete Post order
+     *
      * @return the count.
      */
     /* Returns the number of leaf nodes in this tree, returns 0 if tree is empty*/
@@ -193,27 +193,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
         //left for you to implement in Lab 7
         int count = 0; //count of leaf nodes
         if (root == null) return count;
-        TreeNode<E> parent = null;
-        TreeNode<E> current = root;
-        for (int i = 0; i < this.size; i++) {
-            //case 1: Check if node is a leaf, incriment the count if it is a leaf, move to the parents right node.
-            if (current.right == null && current.left == null) {
-                count++;
-                current = parent;
+        count = getNumberOfLeaves(root);
+        return count;
+    }
 
-                current = current.right;
-            }
-            //case 2: current node has a left node.
-            else if (current.left != null) {
-                parent = current;
-                current = current.left;
-                //case 3: current node has no left node but a right node.
-            } else if (current.right != null) {
-                parent = current;
-                current = current.right;
-            }
+    private int getNumberOfLeaves(TreeNode<E> root) {
+        int count = 0;
+        TreeNode<E> current = root;
+        //Check if tree is empty
+        if (root == null) return count;
+        count += getNumberOfLeaves(root.left);
+        count += getNumberOfLeaves(root.right);
+
+        if (current.left == null && current.right == null) {
+            count++;
         }
-        System.out.print("The number of leaves is " + count);
         return count;
     }
 
@@ -223,7 +217,7 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
      * Iterate through the tree in preorder and add each element starting from specified element.
      * Root is not specified element.
      * Return the ArrayList.
-     * Does it need to search for the elemnet before returning the empty ArrayList?
+     * Does it need to search for the element before returning the empty ArrayList?
      *
      * @param e Eleemnet to be searched.
      * @return Return the array empty or not.
@@ -231,16 +225,21 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     /* Returns an ArrayList containing all elements in preorder of the specified element’s left sub-tree, returns an empty ArrayList if no  such element exists. */
     public ArrayList<E> leftSubTree(E e) {
         //left for you to implement in Lab 7
-        java.util.ArrayList<E> list = new java.util.ArrayList<>();
+        java.util.ArrayList<E> list = new java.util.ArrayList<E>();
         if (root != null && search(e)) {
-            TreeNode<E> current = root.left;//Start from the root.
-            list.add(current.element);
-            current = current.left;
-            list.add(current.element);
-            current = current.right;
-            list.add(current.element);
+            TreeNode<E> current = root;//Start from the root.
+            while (current != null) {
+                if (e.compareTo(current.element) < 0) {
+                    current = current.left;
+                } else if (e.compareTo(current.element) > 0) {
+                    current = current.right;
 
-
+                } else break; // element matches current.element
+            }
+            //Start from specifiied elemetn's right subtree.
+            if (current.left != null) {
+                list.addAll(getSubTree(current.left));
+            }
         }
         return list;
     }
@@ -262,19 +261,35 @@ public class BinarySearchTree<E extends Comparable<E>> extends AbstractTree<E> {
     /* Returns an ArrayList containing all elements in preorder of the specified element’s right sub-tree, returns an empty ArrayList if no  such element exists. */
     public ArrayList<E> rightSubTree(E e) {
         //left for you to implement in Lab 7
+        //path to the specified element.
         java.util.ArrayList<E> list = new java.util.ArrayList<E>();
         if (root != null && search(e)) {
-            TreeNode<E> current = root.right;//Start from the root.
-            //loop to iterate through selected node's subtree.
-            for (int i = 0; i < this.size; i++) {
-                list.add(current.element);
-                current = current.left;
-                list.add(current.element);
-                current = current.right;
-                list.add(current.element);
+            TreeNode<E> current = root;//Start from the root.
+            while (current != null) {
+                if (e.compareTo(current.element) < 0) {
+                    current = current.left;
+                } else if (e.compareTo(current.element) > 0) {
+                    current = current.right;
+
+                } else break; // element matches current.element
+            }
+            //Start from specifiied elemetn's right subtree.
+            if (current.right != null) {
+                list.addAll(getSubTree(current.right));
             }
         }
         return list;
+    }
+
+
+    //Recursive function to get a specified subtree in preorder
+    public ArrayList<E> getSubTree(TreeNode<E> root) {
+        java.util.ArrayList<E> subList = new java.util.ArrayList<E>();
+        if (root == null) return subList;
+        subList.add(root.element);
+        subList.addAll(getSubTree(root.left));
+        subList.addAll(getSubTree(root.right));
+        return subList;
     }
 
     /**
